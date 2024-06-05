@@ -51,7 +51,6 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.test)
             implementation(libs.material)
-            implementation(libs.androidx.material.icons.extended)
 
         }
         desktopMain.dependencies {

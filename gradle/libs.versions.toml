@@ -18,11 +18,9 @@ kotlin = "2.0.0"
 lifecycleViewmodelCompose = "2.8.0"
 material = "1.6.10"
 material3 = "1.2.1"
-materialIconsExtended = "1.6.7"
 navigationCompose = "2.7.0-alpha07"
 
 [libraries]
-androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
