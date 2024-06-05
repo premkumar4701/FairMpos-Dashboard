@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlinX.serialization.plugin)
 }
 
 kotlin {
@@ -60,6 +61,7 @@ kotlin {
             implementation(libs.ktor.contentNegotiation)
             implementation(libs.ktor.json)
             implementation(libs.ktor.logging)
+            implementation(libs.kotlinX.serializationJson)
             // Coroutine
             implementation(libs.kotlinx.coroutines.core)
         }
