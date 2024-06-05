@@ -46,10 +46,10 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.navigation.compose)
-            implementation(libs.koin.core)
-            implementation(libs.koin.test)
             implementation(libs.material)
-
+            // Koin
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

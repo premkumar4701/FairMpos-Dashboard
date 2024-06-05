@@ -12,17 +12,18 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
 compose-plugin = "1.6.10"
 junit = "4.13.2"
-koinCore = "3.5.3"
 kotlin = "2.0.0"
 lifecycleViewmodelCompose = "2.8.0"
 material = "1.6.10"
 material3 = "1.2.1"
 navigationCompose = "2.7.0-alpha07"
 
+# Koin
+koin = "3.5.6"
+koin-compose = "1.1.5"
+
 [libraries]
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinCore" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -36,6 +37,10 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 material = { module = "org.jetbrains.compose.material:material", version.ref = "material" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+# Koin Dependency Injection
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

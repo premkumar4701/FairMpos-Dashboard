@@ -1,5 +1,6 @@
 package ui.setup
 
+import Greeting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -42,18 +41,18 @@ import fairmpos_dashboard.composeapp.generated.resources.submit
 import fairmpos_dashboard.composeapp.generated.resources.welcome_message
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import theme.colorLabel
 import theme.colorProgressBar
 import theme.colorText
 import theme.colorTextInputLayoutStroke
-import ui.FairMposScreens
+import ui.main.FairMposScreens
 
 @Composable
 fun SetupScreen(navHostController: NavHostController, modifier: Modifier) {
   var organizationCode by remember { mutableStateOf("") }
   var isShowLoading by remember { mutableStateOf(false) }
-
+  val greeting = koinInject<Greeting>()
   Column(
       modifier = modifier.padding(top = 100.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,10 +89,9 @@ fun SetupScreen(navHostController: NavHostController, modifier: Modifier) {
             value = organizationCode,
             onValueChange = { organizationCode = it },
             label = { Text(stringResource(Res.string.code_hint)) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = colorTextInputLayoutStroke,
-                focusedLabelColor = colorText
-            ),
+            colors =
+                TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = colorTextInputLayoutStroke, focusedLabelColor = colorText),
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
 
         Spacer(modifier = Modifier.height(20.dp))

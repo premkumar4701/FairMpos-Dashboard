@@ -1,4 +1,4 @@
-package ui
+package ui.main
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween

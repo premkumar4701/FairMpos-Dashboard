@@ -2,7 +2,7 @@ package ui.placeholder
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import ui.FairMposScreens
+import ui.main.FairMposScreens
 
 class PlaceHolderViewModel : ViewModel() {
 

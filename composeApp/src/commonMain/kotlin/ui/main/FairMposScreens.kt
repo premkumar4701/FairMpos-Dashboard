@@ -1,4 +1,4 @@
-package ui
+package ui.main
 
 import fairmpos_dashboard.composeapp.generated.resources.Res
 import fairmpos_dashboard.composeapp.generated.resources.desktop_platform

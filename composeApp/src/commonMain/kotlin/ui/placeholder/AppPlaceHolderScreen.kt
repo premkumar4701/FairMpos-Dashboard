@@ -1,10 +1,9 @@
 package ui.placeholder
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import ui.FairMposScreens
+import ui.main.FairMposScreens
 
 @Composable
 fun PlaceHolderScreen(navHostController: NavHostController, modifier: Modifier){
