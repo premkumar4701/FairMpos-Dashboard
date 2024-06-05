@@ -1,5 +1,5 @@
 import androidx.compose.runtime.*
-import di.AppModule
+import di.appModule
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 import theme.AppTheme
@@ -9,7 +9,7 @@ import ui.main.FairMposApp
 @Preview
 fun App() {
   KoinApplication(application = {
-    modules(AppModule)
+    modules(appModule(true))
   }) {
     AppTheme { FairMposApp() }
   }
