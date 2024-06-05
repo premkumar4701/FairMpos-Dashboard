@@ -36,6 +36,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.android)
             // Coroutine
             implementation(libs.kotlinx.coroutines.android)
         }
@@ -56,6 +57,9 @@ kotlin {
             implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.androidx.datastore.core)
             implementation(libs.atomicfu)
+            implementation(libs.ktor.contentNegotiation)
+            implementation(libs.ktor.json)
+            implementation(libs.ktor.logging)
             // Coroutine
             implementation(libs.kotlinx.coroutines.core)
         }
@@ -63,6 +67,9 @@ kotlin {
             implementation(compose.desktop.currentOs)
             // Coroutine
             implementation(libs.kotlinx.coroutines.swing)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.darwin)
         }
     }
 }
