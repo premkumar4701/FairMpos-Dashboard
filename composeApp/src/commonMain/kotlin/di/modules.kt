@@ -3,6 +3,7 @@ package di
 import datastore.DataStoreDaoImpl
 import datastore.dataStorePreferences
 import Greeting
+import api.fairdashboard.FairDashboardService
 import api.login.LoginService
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.addDefaultResponseValidation
@@ -36,7 +37,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
             defaultRequest {
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = "lspl.mposv2-stage.lspl.dev"
+                    host = "mpos-stage.lspl.dev"
                 }
             }
 
@@ -63,5 +64,8 @@ fun appModule(enableNetworkLogs: Boolean) = module {
     }
     single {
         LoginService(httpClient = get())
+    }
+    single {
+        FairDashboardService(httpClient = get())
     }
 }
