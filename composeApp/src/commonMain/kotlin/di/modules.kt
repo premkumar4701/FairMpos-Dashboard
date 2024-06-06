@@ -36,7 +36,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
             defaultRequest {
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = ""
+                    host = "lspl.mposv2-stage.lspl.dev"
                 }
             }
 

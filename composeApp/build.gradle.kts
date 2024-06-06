@@ -67,6 +67,7 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.java)
             // Coroutine
             implementation(libs.kotlinx.coroutines.swing)
         }
