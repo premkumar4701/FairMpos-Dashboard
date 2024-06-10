@@ -9,12 +9,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -58,13 +61,16 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
   val currentScreen =
       FairMposScreens.valueOf(
           backStackEntry?.destination?.route ?: FairMposScreens.PlaceHolder.name)
-  Scaffold(
+    val snackbarHostState = remember { SnackbarHostState() }
+    Scaffold(
       topBar = {
         FairMposAppbar(
             currentScreen = currentScreen,
             canNavigateBack = navController.previousBackStackEntry != null,
             navigateUp = { navController.navigateUp() })
-      }) { innerPadding ->
+      },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = FairMposScreens.PlaceHolder.name,
@@ -89,7 +95,7 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
                 SetupScreen(navController, modifier = responsivePadding())
               }
               composable(route = FairMposScreens.Login.name) {
-                LoginScreen(modifier = Modifier.fillMaxSize(), navController)
+                LoginScreen(modifier = Modifier.fillMaxSize(), navController, snackbarHostState = snackbarHostState)
               }
               composable(route = FairMposScreens.Home.name) {
                 HomeScreen(modifier = Modifier.fillMaxSize())

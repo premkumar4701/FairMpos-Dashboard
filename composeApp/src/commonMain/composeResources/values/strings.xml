@@ -84,8 +84,8 @@
     <string name="cancel">Cancel</string>
     <string name="organization_code_label">Enter your organization code below</string>
     <string name = "login_label">Login below with your dashboard credentials</string>
-    <string name="username_error">Username shouldn\'t be a blank</string>
-    <string name="password_error">Password shouldn\'t be a blank</string>
+    <string name="username_error">Username shouldn't be a blank</string>
+    <string name="password_error">Password shouldn't be a blank</string>
     <string name="login_fragment_description">To proceed, login with your dashboard credentials.</string>
     <string name="invalid_credentials">Invalid username and password</string>
     <string name="username">Username</string>

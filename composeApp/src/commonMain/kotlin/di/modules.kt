@@ -1,8 +1,10 @@
 package di
 
-import Greeting
 import org.koin.dsl.module
+import ui.login.LoginViewModel
+import ui.setup.SetupViewModel
 
 val AppModule = module {
-    factory { Greeting() }
+  factory { LoginViewModel() }
+  factory { SetupViewModel() }
 }
