@@ -2,8 +2,13 @@ package di
 
 import datastore.DataStoreDaoImpl
 import datastore.dataStorePreferences
-import Greeting
+import api.bestsellers.BestSellersService
+import api.billingdeviceinfo.BillingDeviceInfoService
+import api.billitemsoverview.BillItemsOverviewService
+import api.billwiseoverview.BillWiseOverviewService
+import api.datewiseoverview.DateWiseOverviewService
 import api.fairdashboard.FairDashboardService
+import api.fairoverview.FairOverviewService
 import api.login.LoginService
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.addDefaultResponseValidation
@@ -21,10 +26,10 @@ import ui.setup.SetupViewModel
 import ui.utils.getContext
 
 fun appModule(enableNetworkLogs: Boolean) = module {
-  single { dataStorePreferences(context = getContext()) }
-  single { DataStoreDaoImpl(preferenceDataStore = get()) }
-  factory { LoginViewModel() }
-  factory { SetupViewModel(dataStoreDaoImpl = get()) }
+    single { dataStorePreferences(context = getContext()) }
+  single { DataStoreDaoImpl(preferenceDataStore = get()) }factory { LoginViewModel() }
+    factory { LoginViewModel() }
+    factory { SetupViewModel(dataStoreDaoImpl = get()) }
     /**
      * Creates a http client for Ktor that is provided to the
      * API client via constructor injection
@@ -67,5 +72,23 @@ fun appModule(enableNetworkLogs: Boolean) = module {
     }
     single {
         FairDashboardService(httpClient = get())
+    }
+    single {
+        BestSellersService(httpClient = get())
+    }
+    single {
+        BillingDeviceInfoService(httpClient = get())
+    }
+    single {
+        BillItemsOverviewService(httpClient = get())
+    }
+    single {
+        BillWiseOverviewService(httpClient = get())
+    }
+    single {
+        DateWiseOverviewService(httpClient = get())
+    }
+    single {
+        FairOverviewService(httpClient = get())
     }
 }
