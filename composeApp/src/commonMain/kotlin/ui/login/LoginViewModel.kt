@@ -3,16 +3,26 @@ package ui.login
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import api.login.LoginDto
+import api.login.LoginService
 import fairmpos_dashboard.composeapp.generated.resources.Res
-import fairmpos_dashboard.composeapp.generated.resources.invalid_credentials
 import fairmpos_dashboard.composeapp.generated.resources.password_error
 import fairmpos_dashboard.composeapp.generated.resources.username_error
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
+import org.koin.core.component.KoinComponent
+import utils.isLoading
+import utils.onFailure
+import utils.onSuccess
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel constructor(private val loginService: LoginService) : KoinComponent {
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   var loginView by mutableStateOf(LoginView())
     private set
@@ -26,14 +36,11 @@ class LoginViewModel : ViewModel() {
   private val _success = MutableStateFlow(false)
   val success: Flow<Boolean> = _success
 
-  private val _loginErrorViewFlow  = MutableStateFlow(LoginErrorView())
+  private val _loginErrorViewFlow = MutableStateFlow(LoginErrorView())
   val loginErrorViewFlow: Flow<LoginErrorView> = _loginErrorViewFlow
 
   private val _error = MutableStateFlow("")
   val error: Flow<String> = _error
-
-  // TODO need to implemented after ktor
-  // private val loginService: LoginService = LoginService.getInstance()
 
   fun setUserName(value: String) {
     loginView = loginView.copy(userName = value)
@@ -54,32 +61,25 @@ class LoginViewModel : ViewModel() {
   }
 
   private suspend fun dashboardLogin() {
-    // TODO need to implemented after ktor
-    //        viewModelScope.launch {
-    //            when (val result =
-    //                loginService.login(UserLogin(login.userName.trim(), login.password.trim()))) {
-    //                is Result.Success -> {
-    //                    if (result.value) {
-    //                        LSPref.isAuthenticated = true
-    //                        _success.value = Event(Unit)
-    //                    }
-    //                }
-    //
-    //                is Result.Error -> {
-    //                    _loginError.value =
-    // Event(application.getString(R.string.invalid_credentials))
-    //                }
-    //
-    //                is Result.NoConnection -> Unit
-    //            }
-    //            _isLoading.value = false
-    //        }
-    if (loginView.userName.trim() == "prem" && loginView.password.trim() == "123") {
-      _success.value = true
-    } else {
-      _error.value = getString(Res.string.invalid_credentials)
+
+    viewModelScope.launch {
+      loginService
+          .login(
+              LoginDto(userName = loginView.userName.trim(), password = loginView.password.trim()))
+          .collectLatest { moviesResult ->
+            moviesResult
+                .isLoading { isLoading -> isShowLoading = isLoading }
+                .onSuccess {
+                  // TODO: LSPref.isAuthenticated = true, Need to be set here.
+                  isShowLoading = false
+                  _success.value = it.data
+                }
+                .onFailure { error ->
+                  isShowLoading = false
+                  _error.value = error.toString()
+                }
+          }
     }
-    isShowLoading = false
   }
 
   private suspend fun loginValidation(): Boolean {

@@ -26,69 +26,48 @@ import ui.setup.SetupViewModel
 import ui.utils.getContext
 
 fun appModule(enableNetworkLogs: Boolean) = module {
-    single { dataStorePreferences(context = getContext()) }
+  single { dataStorePreferences(context = getContext()) }
   single { DataStoreDaoImpl(preferenceDataStore = get()) }factory { LoginViewModel() }
-    factory { LoginViewModel() }
-    factory { SetupViewModel(dataStoreDaoImpl = get()) }
-    /**
-     * Creates a http client for Ktor that is provided to the
-     * API client via constructor injection
-     */
-    single {
-        HttpClient {
-            expectSuccess = true
-            addDefaultResponseValidation()
+    factory { LoginViewModel(get()) }
+  factory { SetupViewModel(dataStoreDaoImpl = get()) }
+  /** Creates a http client for Ktor that is provided to the API client via constructor injection */
+  single {
+    HttpClient {
+      expectSuccess = true
+      addDefaultResponseValidation()
 
-            defaultRequest {
-                url {
-                    protocol = URLProtocol.HTTPS
-                    host = "mpos-stage.lspl.dev"
-                }
-            }
-
-            if (enableNetworkLogs) {
-                install(Logging) {
-                    level = LogLevel.HEADERS
-                    logger = object : Logger {
-                        override fun log(message: String) {
-
-                        }
-                    }
-                }
-            }
-
-            install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    }
-                )
-            }
+      defaultRequest {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = "mpos-stage.lspl.dev"
         }
+      }
+
+      if (enableNetworkLogs) {
+        install(Logging) {
+          level = LogLevel.HEADERS
+          logger =
+              object : Logger {
+                override fun log(message: String) {}
+              }
+        }
+      }
+
+      install(ContentNegotiation) {
+        json(
+            Json {
+              ignoreUnknownKeys = true
+              isLenient = true
+            })
+      }
     }
-    single {
-        LoginService(httpClient = get())
-    }
-    single {
-        FairDashboardService(httpClient = get())
-    }
-    single {
-        BestSellersService(httpClient = get())
-    }
-    single {
-        BillingDeviceInfoService(httpClient = get())
-    }
-    single {
-        BillItemsOverviewService(httpClient = get())
-    }
-    single {
-        BillWiseOverviewService(httpClient = get())
-    }
-    single {
-        DateWiseOverviewService(httpClient = get())
-    }
-    single {
-        FairOverviewService(httpClient = get())
-    }
+  }
+  single { LoginService(httpClient = get()) }
+  single { FairDashboardService(httpClient = get()) }
+  single { BestSellersService(httpClient = get()) }
+  single { BillingDeviceInfoService(httpClient = get()) }
+  single { BillItemsOverviewService(httpClient = get()) }
+  single { BillWiseOverviewService(httpClient = get()) }
+  single { DateWiseOverviewService(httpClient = get()) }
+  single { FairOverviewService(httpClient = get()) }
 }
