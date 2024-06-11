@@ -8,12 +8,26 @@ import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import datastore.DataStoreDaoImpl
+import api.HealthResponse
 import fairmpos_dashboard.composeapp.generated.resources.Res
 import fairmpos_dashboard.composeapp.generated.resources.invalid_code
 import fairmpos_dashboard.composeapp.generated.resources.invalid_url_address
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.get
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.getString
 import ui.utils.UseCaseResult
 
@@ -22,8 +36,10 @@ class SetupViewModel(
 ) : ViewModel() {
   var setupModel by mutableStateOf(SetupModel())
     private set
+
   var isShowLoading by mutableStateOf(false)
     private set
+
   private val _success = MutableStateFlow(false)
   val success: Flow<Boolean> = _success
 
@@ -82,52 +98,11 @@ class SetupViewModel(
     }
   }
 
-  private suspend fun isUrlValid(endPoint: String): Boolean {
-    // TODO need a ktor implementation
-    //    return withContext(Dispatchers.IO) {
-    //      try {
-    //        val client = OkHttpClient()
-    //        val request = Request.Builder().url("${url}api/health").get().build()
-    //        val response = client.newCall(request).execute()
-    //        response.isSuccessful &&
-    //                response.body?.let {
-    //                  val type =
-    //                    Types.newParameterizedType(
-    //                      LsResponse::class.java,
-    //                      Boolean::class.javaObjectType
-    //                    )
-    //                  val pullResponse =
-    //                    RetrofitFactory.moshi.adapter<LsResponse<Boolean>>(type)
-    //                      .fromJson(it.source())!!
-    //                  pullResponse.data == true
-    //                } ?: false
-    //      } catch (e: Exception) {
-    //        Timber.e("Error on isUrlValid $e")
-    //        false
-    //      }
-    //    }
-    return endPoint == "https://lspl.mposv2-stage.lspl.dev/"
-  }
-
   private fun getEndpoint(setupModel: SetupModel): String {
+    // TODO: Need to be handled build variant wise
     val cleanedSetupCode = cleanCode(setupModel.organizationCode!!)
-    // TODO flavours need to be implemented
-    //    if (BuildConfig.DEBUG && cleanedSetupCode.startsWith("!", ignoreCase = true)) {
-    //      return ensureTrailingSlash(cleanedSetupCode.removePrefix("!"))
-    //    }
-    //    if (cleanedSetupCode == BuildConfig.TESTING_KEY_FOR_PLAY_CONSOLE) {
-    //      return ensureTrailingSlash(BuildConfig.STAGING_URL)
-    //    }
-    //    val suffix =
-    //        when {
-    //          BuildConfig.DEBUG -> {
-    //            BuildConfig.STAGING_SUFFIX
-    //          }
-    //          else -> {
-    //            BuildConfig.PRODUCTION_SUFFIX
-    //          }
-    //        }
-    return ensureTrailingSlash("https://${cleanedSetupCode}.mposv2-stage.lspl.dev")
+    val suffix = ".mposv2-stage.lspl.dev"
+    return ensureTrailingSlash("https://${cleanedSetupCode}$suffix")
   }
 
   private fun cleanCode(code: String): String {
@@ -152,6 +127,40 @@ class SetupViewModel(
     model.organizationCode = setupModel.organizationCode
     model.organizationCodeError = null
     return UseCaseResult.Success(model)
+  }
+
+  private val client = HttpClient {
+    install(ContentNegotiation) {
+      json(
+          Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+          })
+    }
+
+    install(Logging) { level = LogLevel.INFO }
+  }
+
+  private suspend fun isUrlValid(url: String): Boolean {
+    return try {
+      val response: HttpResponse =
+          client.get {
+            url("${url}api/health")
+            contentType(ContentType.Application.Json)
+          }
+      if (response.status == HttpStatusCode.OK) {
+        val healthResponse: HealthResponse = response.body()
+        println("Response: $healthResponse")
+        healthResponse.date
+      } else {
+        println("Error: Received status code ${response.status}")
+        false
+      }
+    } catch (e: Exception) {
+      println("Error on isUrlValid: $e")
+      setOrganizationCode(e.toString())
+      false
+    }
   }
 
   fun setOrganizationCode(value: String) {
