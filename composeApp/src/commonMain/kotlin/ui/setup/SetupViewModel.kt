@@ -158,7 +158,6 @@ class SetupViewModel(
       }
     } catch (e: Exception) {
       println("Error on isUrlValid: $e")
-      setOrganizationCode(e.toString())
       false
     }
   }
