@@ -13,13 +13,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.koin.core.component.KoinComponent
-import utils.isLoading
-import utils.onFailure
-import utils.onSuccess
+import utils.Result
+import utils.getMessage
 
 class LoginViewModel constructor(private val loginService: LoginService) : KoinComponent {
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
@@ -66,18 +64,27 @@ class LoginViewModel constructor(private val loginService: LoginService) : KoinC
       loginService
           .login(
               LoginDto(userName = loginView.userName.trim(), password = loginView.password.trim()))
-          .collectLatest { moviesResult ->
-            moviesResult
-                .isLoading { isLoading -> isShowLoading = isLoading }
-                .onSuccess {
-                  // TODO: LSPref.isAuthenticated = true, Need to be set here.
+          .collect { result ->
+            when (result) {
+              is Result.Success -> {
+                // TODO: LSPref.isAuthenticated = true, Need to be set here.
+                if (result.response.success) {
                   isShowLoading = false
-                  _success.value = it.data
-                }
-                .onFailure { error ->
+                  _success.value = result.response.data
+                } else {
                   isShowLoading = false
-                  _error.value = error.toString()
+                  _error.value = result.response.message.getMessage()
                 }
+              }
+              is Result.Unauthorized -> {
+                isShowLoading = false
+                _error.value = "Invalid username and password"
+              }
+              is Result.Failure -> {
+                isShowLoading = false
+                _error.value = result.message.getMessage()
+              }
+            }
           }
     }
   }

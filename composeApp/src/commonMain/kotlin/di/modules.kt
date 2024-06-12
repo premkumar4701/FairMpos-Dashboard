@@ -33,7 +33,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
   single {
     HttpClient {
-      expectSuccess = true
+      expectSuccess = false
       addDefaultResponseValidation()
 
       defaultRequest {
