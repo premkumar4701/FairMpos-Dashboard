@@ -17,23 +17,29 @@ class LoginService constructor(private val httpClient: HttpClient) {
 
   suspend fun login(userLogin: LoginDto): Flow<Result> {
     return flow {
-      val response: HttpResponse =
+      try {
+        val response: HttpResponse =
           httpClient.post("https://mpos-stage.lspl.dev/api/dashboard/login") {
             contentType(ContentType.Application.Json)
             setBody(userLogin)
           }
-      when (val statusCode = response.status) {
-        HttpStatusCode.OK -> {
-          val loginResponse: LoginResponse = response.body()
-          if (loginResponse.success) {
-            emit(Result.Success(loginResponse, statusCode))
-          } else {
-            emit(Result.Failure(statusCode, loginResponse.message))
+        when (val statusCode = response.status) {
+
+          HttpStatusCode.OK -> {
+            val loginResponse: LoginResponse = response.body()
+            if (loginResponse.success) {
+              emit(Result.Success(loginResponse, statusCode))
+            } else {
+              emit(Result.Failure(null, loginResponse.message))
+            }
+          }
+
+          HttpStatusCode.Unauthorized -> {
+            emit(Result.Unauthorized(statusCode, "Unauthorized"))
           }
         }
-        HttpStatusCode.Unauthorized -> {
-          emit(Result.Unauthorized(statusCode, "Unauthorized"))
-        }
+      } catch (e:Exception){
+        emit(Result.Failure(exception = e))
       }
     }
   }

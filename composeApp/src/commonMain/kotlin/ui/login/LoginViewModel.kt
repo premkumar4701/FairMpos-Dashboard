@@ -82,7 +82,7 @@ class LoginViewModel constructor(private val loginService: LoginService) : KoinC
               }
               is Result.Failure -> {
                 isShowLoading = false
-                _error.value = result.message.getMessage()
+                _error.value = result.message?.getMessage() ?: "Something went wrong"
               }
             }
           }
