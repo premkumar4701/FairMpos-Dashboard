@@ -27,7 +27,7 @@ import ui.utils.getContext
 
 fun appModule(enableNetworkLogs: Boolean) = module {
   single { dataStorePreferences(context = getContext()) }
-  single { DataStoreDaoImpl(preferenceDataStore = get()) }factory { LoginViewModel() }
+  single { DataStoreDaoImpl(preferenceDataStore = get()) }
     factory { LoginViewModel(get()) }
   factory { SetupViewModel(dataStoreDaoImpl = get()) }
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
