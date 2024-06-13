@@ -3,8 +3,9 @@
     <string name="login">Login</string>
     <string name="home">Home</string>
     <string name="setup">Setup</string>
-    <string name="appPlaceholder">PlaceHolder</string>  <string name="app_name">FairMPOS Dashboard</string>
-
+    <string name="appPlaceholder">PlaceHolder</string>
+    <string name="app_name">FairMPOS Dashboard</string>
+    <string name="no_connection">NoConnection</string>
     <string name="no_internet">No network connectivity. Please connect to the network (3G/4G/WiFi) and then try again</string>
     <string name="refresh">Refresh</string>
     <string name="welcome_message">FairMPOS Dashboard is the cleanest way to keep up to date with your sales information from fairMPOS. To get started, please enter the application key below. This will be provided to you by your administrator.</string>
@@ -83,7 +84,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="organization_code_label">Enter your organization code below</string>
-    <string name = "login_label">Login below with your dashboard credentials</string>
+    <string name="login_label">Login below with your dashboard credentials</string>
     <string name="username_error">Username shouldn't be a blank</string>
     <string name="password_error">Password shouldn't be a blank</string>
     <string name="login_fragment_description">To proceed, login with your dashboard credentials.</string>

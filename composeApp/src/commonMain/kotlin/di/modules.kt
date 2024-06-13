@@ -1,7 +1,5 @@
 package di
 
-import datastore.DataStoreDaoImpl
-import datastore.dataStorePreferences
 import api.bestsellers.BestSellersService
 import api.billingdeviceinfo.BillingDeviceInfoService
 import api.billitemsoverview.BillItemsOverviewService
@@ -10,6 +8,8 @@ import api.datewiseoverview.DateWiseOverviewService
 import api.fairdashboard.FairDashboardService
 import api.fairoverview.FairOverviewService
 import api.login.LoginService
+import datastore.DataStoreDaoImpl
+import datastore.dataStorePreferences
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.addDefaultResponseValidation
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -28,7 +28,7 @@ import ui.utils.getContext
 fun appModule(enableNetworkLogs: Boolean) = module {
   single { dataStorePreferences(context = getContext()) }
   single { DataStoreDaoImpl(preferenceDataStore = get()) }
-    factory { LoginViewModel(get()) }
+  factory { LoginViewModel(loginService = get()) }
   factory { SetupViewModel(dataStoreDaoImpl = get()) }
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
   single {
