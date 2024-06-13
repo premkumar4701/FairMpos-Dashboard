@@ -52,6 +52,10 @@ kotlin {
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+            // Data preferences
+            implementation(libs.androidx.datastore.preferences.core)
+            implementation(libs.androidx.datastore.core)
+            implementation(libs.atomicfu)
             // Coroutine
             implementation(libs.kotlinx.coroutines.core)
         }

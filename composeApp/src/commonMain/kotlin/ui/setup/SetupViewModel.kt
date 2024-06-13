@@ -7,6 +7,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import datastore.DataStoreDaoImpl
 import fairmpos_dashboard.composeapp.generated.resources.Res
 import fairmpos_dashboard.composeapp.generated.resources.invalid_code
 import fairmpos_dashboard.composeapp.generated.resources.invalid_url_address
@@ -16,14 +17,13 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import ui.utils.UseCaseResult
 
-class SetupViewModel : ViewModel() {
-
+class SetupViewModel(
+  private val dataStoreDaoImpl: DataStoreDaoImpl
+) : ViewModel() {
   var setupModel by mutableStateOf(SetupModel())
     private set
-
   var isShowLoading by mutableStateOf(false)
     private set
-
   private val _success = MutableStateFlow(false)
   val success: Flow<Boolean> = _success
 
@@ -48,10 +48,10 @@ class SetupViewModel : ViewModel() {
 
                 if (isUrlValid(endPoint)) {
                   isShowLoading = false
-                  // TODO implementation need of shared preference & sentry
-                  //                LSPref.baseUrl = endPoint
-                  //                LSPref.isSetup = true
-                  //                Sentry.getCurrentHub().options.serverName = endPoint
+                  dataStoreDaoImpl.setBaseUrl(endPoint)
+                  dataStoreDaoImpl.setSetup(true)
+                  // TODO implementation need of sentry
+                  //  Sentry.getCurrentHub().options.serverName = endPoint
                   setupModel =
                       SetupModel(
                           organizationCode = setupModel.organizationCode,
