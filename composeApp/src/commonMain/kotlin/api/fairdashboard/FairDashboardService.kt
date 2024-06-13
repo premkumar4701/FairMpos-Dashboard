@@ -1,6 +1,5 @@
 package api.fairdashboard
 
-import api.bestsellers.BestSellersResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -11,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import utils.Result
 
 class FairDashboardService constructor(private val httpClient: HttpClient) {
-  suspend fun getFairsBy(status: Int): Flow<Result> {
+  suspend fun getFairsBy(status: Int): Flow<Result<FairDashboardResponse>> {
     return flow {
       try {
         val response: HttpResponse =
@@ -20,11 +19,11 @@ class FairDashboardService constructor(private val httpClient: HttpClient) {
             }
         when (val statusCode = response.status) {
           HttpStatusCode.OK -> {
-            val bestSellersResponse: BestSellersResponse = response.body()
-            if (bestSellersResponse.success) {
-              emit(Result.Success(bestSellersResponse, statusCode))
+            val fairDashboardResponse: FairDashboardResponse = response.body()
+            if (fairDashboardResponse.success) {
+              emit(Result.Success(fairDashboardResponse, statusCode))
             } else {
-              emit(Result.Failure(null, bestSellersResponse.message))
+              emit(Result.Failure(null, fairDashboardResponse.message))
             }
           }
           HttpStatusCode.Unauthorized -> {

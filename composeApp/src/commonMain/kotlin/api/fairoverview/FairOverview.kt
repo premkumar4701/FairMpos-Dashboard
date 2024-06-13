@@ -3,6 +3,19 @@ package api.fairoverview
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
+@Serializable
+data class FairOverviewResponse(
+
+    @SerialName("Success")
+    val success: Boolean,
+
+    @SerialName("Messages")
+    val message: List<String>,
+
+    @SerialName("Data")
+    val data: FairOverView
+)
 @Serializable
 data class FairOverView(
     @SerialName("ID")

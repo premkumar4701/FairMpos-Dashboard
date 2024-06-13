@@ -12,7 +12,7 @@ import utils.Result
 
 class BestSellersService constructor(private val httpClient: HttpClient) {
 
-  suspend fun getBestSellers(fairId: Long, sortBy: Int, noOfItems: Int): Flow<Result> {
+  suspend fun getBestSellers(fairId: Long, sortBy: Int, noOfItems: Int): Flow<Result<BestSellersResponse>> {
     return flow {
       try {
         val response: HttpResponse =

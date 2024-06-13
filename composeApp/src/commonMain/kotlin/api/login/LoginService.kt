@@ -15,7 +15,7 @@ import utils.Result
 
 class LoginService constructor(private val httpClient: HttpClient) {
 
-  suspend fun login(userLogin: LoginDto): Flow<Result> {
+  suspend fun login(userLogin: LoginDto): Flow<Result<LoginResponse>> {
     return flow {
       try {
         val response: HttpResponse =

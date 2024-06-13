@@ -1,8 +1,21 @@
 package api.billwiseoverview
 
+import api.billitemsoverview.BillItemsOverview
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Serializable
+data class BillWiseOverviewResponse(
+
+    @SerialName("Success")
+    val success: Boolean,
+
+    @SerialName("Messages")
+    val message: List<String>,
+
+    @SerialName("Data")
+    val data: BillWiseOverview
+)
 
 @Serializable
 data class BillWiseOverview(

@@ -1,29 +1,48 @@
 package api.datewiseoverview
 
-import api.billwiseoverview.BillWiseOverview
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.path
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import utils.ResultState
-import utils.ServiceRepository
+import kotlinx.coroutines.flow.flow
+import utils.Result
 
-class DateWiseOverviewService(private val httpClient: HttpClient): ServiceRepository()  {
-    suspend fun getDateWiseOverview(
-        fairId: Long
-    ): Flow<ResultState<DateWiseOverviewView>> {
-        return flowOf(
-            safeApiCall {
-                val response =
-                    httpClient.get(urlString = "api/dashboard/fairs-overview/{fair_id}/date-wise-overview") {
-                        url {
-                            path("api", "dashboard", "fairs-overview", fairId.toString(),"date-wise-overview")
-                        }
-                    }.body<DateWiseOverviewView>()
-                response
+class DateWiseOverviewService(private val httpClient: HttpClient) {
+
+  suspend fun getDateWiseOverview(fairId: Long): Flow<Result<DateWiseOverviewResponse>> {
+    return flow {
+      try {
+        val response: HttpResponse =
+            httpClient.get(
+                urlString = "api/dashboard/fairs-overview/{fair_id}/date-wise-overview") {
+                  url {
+                    path(
+                        "api",
+                        "dashboard",
+                        "fairs-overview",
+                        fairId.toString(),
+                        "date-wise-overview")
+                  }
+                }
+        when (val statusCode = response.status) {
+          HttpStatusCode.OK -> {
+            val dateWiseOverviewResponse: DateWiseOverviewResponse = response.body()
+            if (dateWiseOverviewResponse.success) {
+              emit(Result.Success(dateWiseOverviewResponse, statusCode))
+            } else {
+              emit(Result.Failure(null, dateWiseOverviewResponse.message))
             }
-        )
+          }
+          HttpStatusCode.Unauthorized -> {
+            emit(Result.Unauthorized(statusCode, "Unauthorized"))
+          }
+        }
+      } catch (e: Exception) {
+        emit(Result.Failure(exception = e))
+      }
     }
+  }
 }

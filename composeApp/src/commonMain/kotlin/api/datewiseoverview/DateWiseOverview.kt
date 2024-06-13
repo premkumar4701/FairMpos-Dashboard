@@ -1,8 +1,22 @@
 package api.datewiseoverview
 
+import api.billwiseoverview.BillWiseOverview
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
+@Serializable
+data class DateWiseOverviewResponse(
+
+    @SerialName("Success")
+    val success: Boolean,
+
+    @SerialName("Messages")
+    val message: List<String>,
+
+    @SerialName("Data")
+    val data: DateWiseOverview
+)
 
 @Serializable
 data class DateWiseOverview(
