@@ -12,7 +12,7 @@ fun List<String>.getMessage(): String {
 }
 
 sealed class Result {
-  data class Success(val response: LoginResponse, val statusCode: HttpStatusCode) : Result()
+  data class Success<T>(val response: T, val statusCode: HttpStatusCode) : Result()
 
   data class Unauthorized(val statusCode: HttpStatusCode, val message: String) : Result()
 
