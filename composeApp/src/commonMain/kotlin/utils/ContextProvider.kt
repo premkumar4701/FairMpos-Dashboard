@@ -1,3 +1,3 @@
-package ui.utils
+package utils
 
 expect fun getContext(): Any?

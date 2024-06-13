@@ -3,8 +3,10 @@ package ui.login
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import api.login.LoginDto
 import api.login.LoginService
+import datastore.DataStoreDaoImpl
 import fairmpos_dashboard.composeapp.generated.resources.Res
 import fairmpos_dashboard.composeapp.generated.resources.password_error
 import fairmpos_dashboard.composeapp.generated.resources.username_error
@@ -15,11 +17,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.koin.core.component.KoinComponent
 import utils.Result
 import utils.getMessage
 
-class LoginViewModel constructor(private val loginService: LoginService) : KoinComponent {
+class LoginViewModel(
+    private val loginService: LoginService,
+    private val dataStoreDaoImpl: DataStoreDaoImpl
+) : ViewModel() {
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   var loginView by mutableStateOf(LoginView())
@@ -67,7 +71,7 @@ class LoginViewModel constructor(private val loginService: LoginService) : KoinC
           .collect { result ->
             when (result) {
               is Result.Success -> {
-                // TODO: LSPref.isAuthenticated = true, Need to be set here.
+                dataStoreDaoImpl.setAuthenticated(true)
                 if (result.response.success) {
                   isShowLoading = false
                   _success.value = result.response.data

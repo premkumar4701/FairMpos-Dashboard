@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.getString
-import ui.utils.UseCaseResult
+import utils.UseCaseResult
 
 class SetupViewModel(
   private val dataStoreDaoImpl: DataStoreDaoImpl

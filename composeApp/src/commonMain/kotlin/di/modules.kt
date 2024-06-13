@@ -23,12 +23,12 @@ import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import ui.login.LoginViewModel
 import ui.setup.SetupViewModel
-import ui.utils.getContext
+import utils.getContext
 
 fun appModule(enableNetworkLogs: Boolean) = module {
   single { dataStorePreferences(context = getContext()) }
   single { DataStoreDaoImpl(preferenceDataStore = get()) }
-  factory { LoginViewModel(loginService = get()) }
+  factory { LoginViewModel(loginService = get(), dataStoreDaoImpl = get()) }
   factory { SetupViewModel(dataStoreDaoImpl = get()) }
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
   single {

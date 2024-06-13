@@ -1,4 +1,4 @@
-package ui.utils
+package utils
 
 sealed class UseCaseResult<out R> {
     data class Success<out R>(val value: R) : UseCaseResult<R>()
