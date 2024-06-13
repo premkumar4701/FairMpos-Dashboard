@@ -11,10 +11,10 @@ fun List<String>.getMessage(): String {
   }
 }
 
-sealed class Result {
-  data class Success<T>(val response: T, val statusCode: HttpStatusCode) : Result()
+sealed class Result<out R> {
+  data class Success<out R>(val value: R, val statusCode: HttpStatusCode) : Result<R>()
 
-  data class Unauthorized(val statusCode: HttpStatusCode, val message: String) : Result()
+  data class Unauthorized(val statusCode: HttpStatusCode, val message: String) :  Result<Nothing>()
 
-  data class Failure(val exception: Exception? = null, val message: List<String>? = null) : Result()
+  data class Failure(val exception: Exception? = null, val message: List<String>? = null) : Result<Nothing>()
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import api.login.LoginDto
 import api.login.LoginService
+import api.login.model.LoginResponse
 import datastore.DataStoreDaoImpl
 import fairmpos_dashboard.composeapp.generated.resources.Res
 import fairmpos_dashboard.composeapp.generated.resources.password_error
@@ -68,16 +69,16 @@ class LoginViewModel(
       loginService
           .login(
               LoginDto(userName = loginView.userName.trim(), password = loginView.password.trim()))
-          .collect { result ->
+          .collect { result:Result<LoginResponse> ->
             when (result) {
-              is Result.Success -> {
+              is Result.Success<LoginResponse> -> {
                 dataStoreDaoImpl.setAuthenticated(true)
-                if (result.response.success) {
+                if (result.value.success) {
                   isShowLoading = false
-                  _success.value = result.response.data
+                  _success.value = result.value.data
                 } else {
                   isShowLoading = false
-                  _error.value = result.response.message.getMessage()
+                  _error.value =  result.value.message.getMessage()
                 }
               }
               is Result.Unauthorized -> {
