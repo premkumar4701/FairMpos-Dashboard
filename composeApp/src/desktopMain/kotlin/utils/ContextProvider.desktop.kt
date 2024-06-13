@@ -1,3 +1,3 @@
-package ui.utils
+package utils
 
 actual fun getContext(): Any? = null
