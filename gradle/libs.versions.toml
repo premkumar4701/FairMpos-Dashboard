@@ -19,6 +19,7 @@ material3 = "1.2.1"
 navigationCompose = "2.7.0-alpha07"
 ktor = "2.3.7"
 kotlinxSerializationJson = "1.6.2"
+kotlinx-datetime = "0.6.0"
 
 # Koin
 koin = "3.5.6"
@@ -71,6 +72,9 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 androidx-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastorePreferencesCore" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+
+# DateTime
+kotlinx-datetime = {module= "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

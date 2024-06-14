@@ -64,6 +64,8 @@ kotlin {
             implementation(libs.kotlinX.serializationJson)
             // Coroutine
             implementation(libs.kotlinx.coroutines.core)
+            //DateTime
+            implementation(libs.kotlinx.datetime)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
