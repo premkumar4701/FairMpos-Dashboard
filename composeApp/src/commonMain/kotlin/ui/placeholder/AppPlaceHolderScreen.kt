@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import datastore.DataStoreDaoImpl
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import ui.main.FairMposScreens
+import enum.FairMposScreens
 
 @Composable
 fun PlaceHolderScreen(

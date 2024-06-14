@@ -62,6 +62,6 @@ enum class FairType(val code: Int, val text: String) {
 }
 
 data class FairView(
-    var fairList: List<FairDashboard>,
+    var fairList: List<FairDashboard> = emptyList(),
     var fairType: FairType? = FairType.TODAY
 )

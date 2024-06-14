@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -26,7 +24,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import enum.FairMposScreens
+import enum.PlatFormType
 import getPlatform
+import theme.colorText
 import ui.home.HomeScreen
 import ui.login.LoginScreen
 import ui.placeholder.PlaceHolderScreen
@@ -60,7 +61,7 @@ fun FairMposAppbar(
               }
             }
           } else null,
-      backgroundColor = Color(0xFF323F4B),
+      backgroundColor = colorText,
       contentColor = Color.White)
 }
 
@@ -82,7 +83,7 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
             navController = navController,
             startDestination = FairMposScreens.PlaceHolder.name,
             modifier =
-                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(innerPadding),
+                Modifier.fillMaxSize().padding(innerPadding),
             enterTransition = {
               slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(900))
             },

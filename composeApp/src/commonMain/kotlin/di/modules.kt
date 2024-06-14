@@ -21,6 +21,7 @@ import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
+import ui.home.HomeViewModel
 import ui.login.LoginViewModel
 import ui.setup.SetupViewModel
 import utils.getContext
@@ -30,6 +31,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
   single { DataStoreDaoImpl(preferenceDataStore = get()) }
   factory { LoginViewModel(loginService = get(), dataStoreDaoImpl = get()) }
   factory { SetupViewModel(dataStoreDaoImpl = get()) }
+  factory { HomeViewModel(fairDashboardService = get()) }
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
   single {
     HttpClient {
@@ -39,7 +41,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
       defaultRequest {
         url {
           protocol = URLProtocol.HTTPS
-          host = "mpos-stage.lspl.dev"
+          host = "lspl.fairmpos.com"
         }
       }
 
