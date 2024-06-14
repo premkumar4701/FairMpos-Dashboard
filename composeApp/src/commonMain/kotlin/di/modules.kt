@@ -13,6 +13,7 @@ import datastore.dataStorePreferences
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.addDefaultResponseValidation
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
@@ -35,6 +36,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
   single {
     HttpClient {
+      install(HttpCookies)
       expectSuccess = false
       addDefaultResponseValidation()
 
