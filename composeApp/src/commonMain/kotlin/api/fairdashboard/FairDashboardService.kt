@@ -3,6 +3,7 @@ package api.fairdashboard
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +16,7 @@ class FairDashboardService constructor(private val httpClient: HttpClient) {
       try {
         val response: HttpResponse =
             httpClient.get(urlString = "api/dashboard/fairs") {
-              url { parameters.append("status", status.toString()) }
+              parameter("status", status.toString())
             }
         when (val statusCode = response.status) {
           HttpStatusCode.OK -> {
