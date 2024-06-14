@@ -19,7 +19,7 @@ class LoginService constructor(private val httpClient: HttpClient) {
     return flow {
       try {
         val response: HttpResponse =
-          httpClient.post("https://mpos-stage.lspl.dev/api/dashboard/login") {
+          httpClient.post("api/dashboard/login") {
             contentType(ContentType.Application.Json)
             setBody(userLogin)
           }
