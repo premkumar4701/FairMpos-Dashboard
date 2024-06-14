@@ -29,7 +29,7 @@ data class FairDashboard(
     val fairName: String,
 
     @SerialName("School")
-    val schoolName: String,
+    val schoolName: String ?,
 
     //TODO StartDate need to be include
 

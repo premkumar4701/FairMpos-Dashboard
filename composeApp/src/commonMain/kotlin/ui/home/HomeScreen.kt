@@ -111,7 +111,7 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
       if (fairType == FairType.TODAY) {
         CardItem2(
             fairName = fair.fairName,
-            schoolName = fair.schoolName,
+            schoolName = fair.schoolName ?: "",
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty,
             onClick = {},
@@ -120,7 +120,7 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
       } else {
         CardItem(
             fairName = fair.fairName,
-            schoolName = fair.schoolName,
+            schoolName = fair.schoolName ?: "",
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty,
             fairStatus = fair.status,
