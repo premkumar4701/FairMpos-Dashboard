@@ -49,8 +49,9 @@ fun HomeScreen(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = koi
     val isEmpty = remember { mutableStateOf(false) }
     val selectedFairs = remember { mutableStateOf(options[0]) }
     val fairDashboardData = remember { mutableStateOf(listOf<FairDashboard>()) }
-    homeViewModel.loadFairDashboard(selectedFairs.value)
+
     LaunchedEffect(true) {
+      homeViewModel.loadFairDashboard(selectedFairs.value)
       homeViewModel.fetchFairData.collectLatest { fairView ->
         isEmpty.value = fairView.fairList.isEmpty()
         fairDashboardData.value = fairView.fairList
