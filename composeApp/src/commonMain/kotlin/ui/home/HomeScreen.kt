@@ -35,11 +35,14 @@ import androidx.compose.ui.unit.sp
 import api.fairdashboard.FairDashboard
 import api.fairdashboard.FairType
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.koinInject
 import theme.colorLabel
 import theme.colorPrimary
 import theme.colorProgressBar
 import theme.colorText
+import utils.getUIDate
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = koinInject()) {
@@ -109,12 +112,20 @@ fun HomeScreen(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = koi
 fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
   LazyColumn(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
     items(fairDashboardData) { fair ->
+      val fairStartDate = fair.startDate
+      val fairEndDate = fair.endDate
+      val fairStartDateInSystemZone =
+          fairStartDate.toLocalDateTime(TimeZone.currentSystemDefault()).date
+      val fairEndDateInSystemZone =
+          fairEndDate.toLocalDateTime(TimeZone.currentSystemDefault()).date
+      val fairDate = "${fairStartDateInSystemZone.getUIDate()} to ${fairEndDateInSystemZone.getUIDate()}"
       if (fairType == FairType.TODAY) {
         CardItem2(
             fairName = fair.fairName,
             schoolName = fair.schoolName ?: "",
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty,
+            fairDate = fairDate,
             onClick = {},
             todayNetSale = fair.todayNettValue,
             todayNetQtySold = fair.todayNettSoldQty)
@@ -124,6 +135,7 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
             schoolName = fair.schoolName ?: "",
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty,
+            fairDate = fairDate,
             fairStatus = fair.status,
             onClick = {})
       }
@@ -137,8 +149,7 @@ fun CardItem(
     schoolName: String,
     totalNetSale: Double,
     totalNetQtySold: Int,
-    // TODO fairStartDate,
-    // TODO fairEndDate,
+    fairDate: String,
     fairStatus: String,
     onClick: () -> Unit
 ) {
@@ -170,7 +181,7 @@ fun CardItem(
           Text(textAlign = TextAlign.Center, text = schoolName, fontSize = 12.sp, color = colorText)
           Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "1st May 2021 - 05 May 2021",
+                text = fairDate,
                 modifier = Modifier.weight(1f),
                 fontSize = 12.sp,
                 color = colorText)
@@ -190,8 +201,7 @@ fun CardItem2(
     schoolName: String,
     totalNetSale: Double,
     totalNetQtySold: Int,
-    // TODO fairStartDate,
-    // TODO fairEndDate,
+    fairDate: String,
     onClick: () -> Unit,
     todayNetSale: Double,
     todayNetQtySold: Int
@@ -238,11 +248,7 @@ fun CardItem2(
             Text(text = totalNetQtySold.toString(), fontSize = 16.sp, color = colorText)
           }
           Text(textAlign = TextAlign.Center, text = schoolName, fontSize = 12.sp, color = colorText)
-          Text(
-              text = "1st May 2021 - 05 May 2021",
-              modifier = Modifier.weight(1f),
-              fontSize = 12.sp,
-              color = colorText)
+          Text(text = fairDate, modifier = Modifier.weight(1f), fontSize = 12.sp, color = colorText)
         }
       }
 }

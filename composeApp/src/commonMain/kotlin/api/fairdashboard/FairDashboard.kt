@@ -1,5 +1,6 @@
 package api.fairdashboard
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,9 +32,11 @@ data class FairDashboard(
     @SerialName("School")
     val schoolName: String ?,
 
-    //TODO StartDate need to be include
+    @SerialName("StartDate")
+    val startDate: Instant,
 
-    //TODO EndDate need to be include
+    @SerialName("EndDate")
+    val endDate: Instant,
 
     @SerialName("TotalBills")
     val totalBills: Int,
