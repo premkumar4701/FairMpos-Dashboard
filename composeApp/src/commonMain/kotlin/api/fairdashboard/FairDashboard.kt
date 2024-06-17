@@ -51,7 +51,7 @@ data class FairDashboard(
     val totalNettValue: Double,
 
     @SerialName("TotalNettSoldQty")
-    val totalNettSoldQty: Int,
+    val totalNettSoldQty: Int?,
 
     @SerialName("Status")
     val status: String,

@@ -136,21 +136,20 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
       val fairDate =
           "${fairStartDateInSystemZone.getUIDate()} to ${fairEndDateInSystemZone.getUIDate()}"
       if (fairType == FairType.TODAY) {
-        CardItem2(
+        TodayFairCardItem(
             fairName = fair.fairName,
-            schoolName = fair.schoolName ?: "",
+            schoolName = fair.schoolName,
             totalNetSale = fair.totalNettValue,
-            totalNetQtySold = fair.totalNettSoldQty,
-            fairDate = fairDate,
+            totalNetQtySold = fair.totalNettSoldQty ?: 0,
             onClick = {},
             todayNetSale = fair.todayNettValue,
             todayNetQtySold = fair.todayNettSoldQty)
       } else {
         CardItem(
             fairName = fair.fairName,
-            schoolName = fair.schoolName ?: "",
+            schoolName = fair.schoolName,
             totalNetSale = fair.totalNettValue,
-            totalNetQtySold = fair.totalNettSoldQty,
+            totalNetQtySold = fair.totalNettSoldQty ?: 0,
             fairDate = fairDate,
             fairStatus = fair.status,
             onClick = {})
@@ -162,7 +161,7 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
 @Composable
 fun CardItem(
     fairName: String,
-    schoolName: String,
+    schoolName: String?,
     totalNetSale: Double,
     totalNetQtySold: Int,
     fairDate: String,
@@ -194,7 +193,13 @@ fun CardItem(
                 color = colorText)
             Text(text = totalNetQtySold.toString(), fontSize = 16.sp, color = colorText)
           }
-          Text(textAlign = TextAlign.Center, text = schoolName, fontSize = 12.sp, color = colorText)
+          if (schoolName != null) {
+            Text(
+                textAlign = TextAlign.Center,
+                text = schoolName,
+                fontSize = 12.sp,
+                color = colorText)
+          }
           Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = fairDate,
@@ -212,12 +217,11 @@ fun CardItem(
 }
 
 @Composable
-fun CardItem2(
+fun TodayFairCardItem(
     fairName: String,
-    schoolName: String,
+    schoolName: String?,
     totalNetSale: Double,
     totalNetQtySold: Int,
-    fairDate: String,
     onClick: () -> Unit,
     todayNetSale: Double,
     todayNetQtySold: Int
@@ -263,8 +267,13 @@ fun CardItem2(
                 color = colorText)
             Text(text = totalNetQtySold.toString(), fontSize = 16.sp, color = colorText)
           }
-          Text(textAlign = TextAlign.Center, text = schoolName, fontSize = 12.sp, color = colorText)
-          Text(text = fairDate, modifier = Modifier.weight(1f), fontSize = 12.sp, color = colorText)
+          if (schoolName != null) {
+            Text(
+                textAlign = TextAlign.Center,
+                text = schoolName,
+                fontSize = 12.sp,
+                color = colorText)
+          }
         }
       }
 }
