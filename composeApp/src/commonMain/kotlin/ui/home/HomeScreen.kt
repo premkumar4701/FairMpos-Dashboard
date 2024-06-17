@@ -1,14 +1,19 @@
 package ui.home
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +22,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -28,15 +34,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import api.fairdashboard.FairDashboard
 import api.fairdashboard.FairType
+import fairmpos_dashboard.composeapp.generated.resources.Res
+import fairmpos_dashboard.composeapp.generated.resources.ic_undraw_empty
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import theme.colorLabel
 import theme.colorPrimary
@@ -99,11 +109,16 @@ fun HomeScreen(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = koi
           }
         }
     Spacer(Modifier.padding(5.dp))
-    if (!isEmpty.value && !homeViewModel.isShowLoading) {
-      CardList(selectedFairs.value, fairDashboardData.value)
-    }
-    if (homeViewModel.isShowLoading) {
-      CircularProgressIndicator(color = colorProgressBar)
+    when {
+      homeViewModel.isShowLoading -> {
+        LoadingProgressBar()
+      }
+      isEmpty.value -> {
+        NoDataCard()
+      }
+      !isEmpty.value && !homeViewModel.isShowLoading -> {
+        CardList(selectedFairs.value, fairDashboardData.value)
+      }
     }
   }
 }
@@ -118,7 +133,8 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
           fairStartDate.toLocalDateTime(TimeZone.currentSystemDefault()).date
       val fairEndDateInSystemZone =
           fairEndDate.toLocalDateTime(TimeZone.currentSystemDefault()).date
-      val fairDate = "${fairStartDateInSystemZone.getUIDate()} to ${fairEndDateInSystemZone.getUIDate()}"
+      val fairDate =
+          "${fairStartDateInSystemZone.getUIDate()} to ${fairEndDateInSystemZone.getUIDate()}"
       if (fairType == FairType.TODAY) {
         CardItem2(
             fairName = fair.fairName,
@@ -251,4 +267,39 @@ fun CardItem2(
           Text(text = fairDate, modifier = Modifier.weight(1f), fontSize = 12.sp, color = colorText)
         }
       }
+}
+
+@Composable
+fun NoDataCard() {
+  Box(Modifier.fillMaxSize()) {
+    Card(
+        shape =
+            RoundedCornerShape(
+                topStart = 8.dp, topEnd = 8.dp, bottomEnd = 8.dp, bottomStart = 8.dp),
+        modifier = Modifier.wrapContentSize().padding(8.dp).align(Alignment.Center),
+        elevation = 8.dp) {
+          Column(
+              Modifier.wrapContentSize().padding(16.dp),
+              horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(Res.drawable.ic_undraw_empty),
+                    contentDescription = "",
+                    modifier = Modifier.size(128.dp),
+                    contentScale = ContentScale.Crop)
+                Spacer(Modifier.padding(5.dp))
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = "No fairs currently running",
+                    style = MaterialTheme.typography.h6,
+                )
+              }
+        }
+  }
+}
+
+@Composable
+fun LoadingProgressBar() {
+  Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    CircularProgressIndicator(color = colorProgressBar)
+  }
 }

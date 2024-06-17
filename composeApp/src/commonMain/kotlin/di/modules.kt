@@ -32,7 +32,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
   single { DataStoreDaoImpl(preferenceDataStore = get()) }
   factory { LoginViewModel(loginService = get(), dataStoreDaoImpl = get()) }
   factory { SetupViewModel(dataStoreDaoImpl = get()) }
-  factory { HomeViewModel(fairDashboardService = get()) }
+  factory { HomeViewModel(fairDashboardService = get(), dataStoreDaoImpl = get()) }
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
   single {
     HttpClient {

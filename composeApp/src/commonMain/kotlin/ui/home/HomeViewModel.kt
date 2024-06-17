@@ -8,12 +8,17 @@ import androidx.lifecycle.viewModelScope
 import api.fairdashboard.FairDashboardService
 import api.fairdashboard.FairType
 import api.fairdashboard.FairView
+import datastore.DataStoreDaoImpl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import utils.Result
+import utils.getMessage
 
-class HomeViewModel(private val fairDashboardService: FairDashboardService) : ViewModel() {
+class HomeViewModel(
+    private val fairDashboardService: FairDashboardService,
+    private val dataStoreDaoImpl: DataStoreDaoImpl
+) : ViewModel() {
   var isShowLoading by mutableStateOf(false)
     private set
 
@@ -26,33 +31,15 @@ class HomeViewModel(private val fairDashboardService: FairDashboardService) : Vi
   private val _isNetWorkError = MutableStateFlow(false)
   val isNetWorkError: Flow<Boolean> = _isNetWorkError
 
-  private val _isServiceError = MutableStateFlow(false)
-  val isServiceError: Flow<Boolean> = _isServiceError
+  private val _serviceError = MutableStateFlow("")
+  val serviceError: Flow<String> = _serviceError
 
   fun loadFairDashboard(value: FairType) {
+    isShowLoading = true
     _fetchFairData.value = FairView(emptyList())
     viewModelScope.launch {
       fairDashboardService.getFairsBy(value.code).collect { result ->
         when (result) {
-          //                    is Result.Success<> -> {
-          //                        val fairView = FairView(
-          //                            fairList = result.value,
-          //                            fairType = FairType.values().find { it.code == status.value
-          // }!!
-          //                        )
-          //                        _fetchFairData.value = fairView
-          //                    }
-          //                    is Result.Error -> {
-          //                        if (result.statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-          //                            LSPref.isAuthenticated = false
-          //                            _isUnAuthorized.value = Event(Unit)
-          //                        }else{
-          //                            _serviceError.value = Event(result.messages.getMessage())
-          //                        }
-          //                    }
-          //                    is Result.NoConnection -> {
-          //                        _networkError.value = Event(Unit)
-          //                    }
           is Result.Success -> {
             val fairView =
                 FairView(
@@ -61,13 +48,14 @@ class HomeViewModel(private val fairDashboardService: FairDashboardService) : Vi
             _fetchFairData.value = fairView
           }
           is Result.Failure -> {
-            val ksj = result.message
+            _serviceError.value = result.message?.getMessage() ?: "Something went wrong"
           }
           is Result.Unauthorized -> {
-            val kk = result.statusCode
-            isShowLoading = true
+            dataStoreDaoImpl.setAuthenticated(false)
+            _isUnAuthorized.value = true
           }
         }
+        isShowLoading = false
       }
     }
   }
