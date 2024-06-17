@@ -109,7 +109,7 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
                     snackbarHostState = snackbarHostState)
               }
               composable(route = FairMposScreens.Home.name) {
-                HomeScreen(modifier = Modifier.fillMaxSize())
+                HomeScreen(modifier = Modifier.fillMaxSize(), navController)
               }
             }
       }

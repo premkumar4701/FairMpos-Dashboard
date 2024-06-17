@@ -39,8 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import api.fairdashboard.FairDashboard
 import api.fairdashboard.FairType
+import enum.FairMposScreens
 import fairmpos_dashboard.composeapp.generated.resources.Res
 import fairmpos_dashboard.composeapp.generated.resources.ic_undraw_empty
 import kotlinx.coroutines.flow.collectLatest
@@ -55,7 +57,11 @@ import theme.colorText
 import utils.getUIDate
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = koinInject()) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+    homeViewModel: HomeViewModel = koinInject()
+) {
   Column(modifier = modifier) {
     val options = FairType.entries
     val expanded = remember { mutableStateOf(false) }
@@ -68,6 +74,13 @@ fun HomeScreen(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = koi
       homeViewModel.fetchFairData.collectLatest { fairView ->
         isEmpty.value = fairView.fairList.isEmpty()
         fairDashboardData.value = fairView.fairList
+      }
+    }
+    LaunchedEffect(true) {
+      homeViewModel.isUnAuthorized.collectLatest {
+        if (it) {
+          navHostController.navigate(FairMposScreens.Login.name)
+        }
       }
     }
 
