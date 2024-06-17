@@ -6,6 +6,7 @@
     <string name="appPlaceholder">PlaceHolder</string>
     <string name="app_name">FairMPOS Dashboard</string>
     <string name="no_connection">NoConnection</string>
+    <string name="fair_overview">FairOverview</string>
     <string name="no_internet">No network connectivity. Please connect to the network (3G/4G/WiFi) and then try again</string>
     <string name="refresh">Refresh</string>
     <string name="welcome_message">FairMPOS Dashboard is the cleanest way to keep up to date with your sales information from fairMPOS. To get started, please enter the application key below. This will be provided to you by your administrator.</string>

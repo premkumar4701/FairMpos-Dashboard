@@ -28,6 +28,7 @@ import enum.FairMposScreens
 import enum.PlatFormType
 import getPlatform
 import theme.colorText
+import ui.fairoverview.FairOverviewScreen
 import ui.home.HomeScreen
 import ui.login.LoginScreen
 import ui.placeholder.PlaceHolderScreen
@@ -39,14 +40,15 @@ fun FairMposAppbar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val canNavigateBack = when(currentScreen) {
+  val canNavigateBack =
+      when (currentScreen) {
         FairMposScreens.Login -> false
         FairMposScreens.Setup -> false
         FairMposScreens.PlaceHolder -> false
         FairMposScreens.Home -> false
         FairMposScreens.NoConnection -> false
         else -> true
-    }
+      }
   TopAppBar(
       title = { Text(currentScreen.name) },
       modifier = modifier,
@@ -74,16 +76,13 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
   val snackbarHostState = remember { SnackbarHostState() }
   Scaffold(
       topBar = {
-        FairMposAppbar(
-            currentScreen = currentScreen,
-            navigateUp = { navController.navigateUp() })
+        FairMposAppbar(currentScreen = currentScreen, navigateUp = { navController.navigateUp() })
       },
       snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = FairMposScreens.PlaceHolder.name,
-            modifier =
-                Modifier.fillMaxSize().padding(innerPadding),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
             enterTransition = {
               slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(900))
             },
@@ -110,6 +109,9 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
               }
               composable(route = FairMposScreens.Home.name) {
                 HomeScreen(modifier = Modifier.fillMaxSize(), navController)
+              }
+              composable(route = FairMposScreens.FairOverview.name) {
+                FairOverviewScreen(modifier = Modifier.fillMaxSize().padding(8.dp))
               }
             }
       }
