@@ -30,6 +30,7 @@ import enum.FairMposScreens
 import enum.PlatFormType
 import getPlatform
 import theme.colorText
+import ui.billingdeviceinfo.BillingDeviceInfoScreen
 import ui.fairoverview.FairOverviewScreen
 import ui.home.HomeScreen
 import ui.login.LoginScreen
@@ -72,8 +73,9 @@ fun FairMposAppbar(
 @Composable
 fun FairMposApp(navController: NavHostController = rememberNavController()) {
   val backStackEntry by navController.currentBackStackEntryAsState()
-  val currentRoute = backStackEntry?.destination?.route?.split("/")?.first()
-  val currentScreen = FairMposScreens.valueOf(currentRoute ?: "PlaceHolder")
+  val currentScreen =
+      FairMposScreens.valueOf(
+          backStackEntry?.destination?.route?.split("/")?.first() ?: FairMposScreens.PlaceHolder.name)
   val snackbarHostState = remember { SnackbarHostState() }
   Scaffold(
       topBar = {
@@ -111,6 +113,13 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
               composable(route = FairMposScreens.Home.name) {
                 HomeScreen(modifier = Modifier.fillMaxSize(), navController)
               }
+              composable(
+                  route = "${FairMposScreens.BillingDeviceInfo.name}/{fairId}",
+                  arguments = listOf(navArgument("fairId") { type = NavType.StringType })) {backStackEntry ->
+                    val userId = backStackEntry.arguments!!.getString("fairId")!!
+                    BillingDeviceInfoScreen(
+                        modifier = Modifier.fillMaxSize(), navController, userId)
+                  }
               composable(
                   route = "${FairMposScreens.FairOverview.name}/{fairId}/{hasBills}",
                   arguments =

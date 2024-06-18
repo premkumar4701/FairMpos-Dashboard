@@ -22,6 +22,7 @@ import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
+import ui.billingdeviceinfo.BillingDeviceInfoViewModel
 import ui.fairoverview.FairOverviewViewModel
 import ui.home.HomeViewModel
 import ui.login.LoginViewModel
@@ -39,6 +40,7 @@ fun appModule(enableNetworkLogs: Boolean) = module {
         fairOverviewService = get(), dataStoreDaoImpl = get(), fairId = get(), hasBills = get())
   }
 
+  factory { BillingDeviceInfoViewModel(billingDeviceInfoService = get(), dataStoreDaoImpl = get()) }
   /** Creates a http client for Ktor that is provided to the API client via constructor injection */
   single {
     HttpClient {

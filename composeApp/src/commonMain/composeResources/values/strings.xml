@@ -106,4 +106,5 @@
     <string name="best_seller">Best sellers</string>
     <string name="mobile_platform">Android</string>
     <string name="desktop_platform">Desktop</string>
+    <string name="synced">Last synced</string>
 </resources>
