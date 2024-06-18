@@ -10,14 +10,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import utils.Result
 
-class BillingDeviceInfoService constructor(private val httpClient: HttpClient) {
+class BillingDeviceInfoService(private val httpClient: HttpClient) {
   suspend fun getBillingDevicesInfo(fairId: Long): Flow<Result<FairDashboardResponse>> {
     return flow {
       try {
         val response: HttpResponse =
-            httpClient.get(urlString = "/api/dashboard/fairs/{fairid}/billing-device-info") {
-              url { path("api", "dashboard", "fairs", fairId.toString()) }
-            }
+            httpClient.get(urlString = "/api/dashboard/fairs/$fairId/billing-device-info")
         when (val statusCode = response.status) {
           HttpStatusCode.OK -> {
             val bestSellersResponse: FairDashboardResponse = response.body()

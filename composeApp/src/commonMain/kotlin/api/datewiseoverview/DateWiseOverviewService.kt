@@ -17,16 +17,7 @@ class DateWiseOverviewService(private val httpClient: HttpClient) {
       try {
         val response: HttpResponse =
             httpClient.get(
-                urlString = "api/dashboard/fairs-overview/{fair_id}/date-wise-overview") {
-                  url {
-                    path(
-                        "api",
-                        "dashboard",
-                        "fairs-overview",
-                        fairId.toString(),
-                        "date-wise-overview")
-                  }
-                }
+                urlString = "api/dashboard/fairs-overview/$fairId/date-wise-overview")
         when (val statusCode = response.status) {
           HttpStatusCode.OK -> {
             val dateWiseOverviewResponse: DateWiseOverviewResponse = response.body()

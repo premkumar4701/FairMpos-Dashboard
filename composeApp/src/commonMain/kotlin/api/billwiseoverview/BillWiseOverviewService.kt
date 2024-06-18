@@ -16,17 +16,7 @@ class BillWiseOverviewService(private val httpClient: HttpClient) {
       try {
         val response: HttpResponse =
             httpClient.get(
-                urlString = "api/dashboard/fairs-overview/{fair_id}/bill-wise-overview") {
-                  url {
-                    path(
-                        "api",
-                        "dashboard",
-                        "fairs-overview",
-                        fairId.toString(),
-                        "bill-wise-overview")
-                    parameters.append("Date", "")
-                  }
-                }
+                urlString = "api/dashboard/fairs-overview/$fairId/bill-wise-overview")
         when (val statusCode = response.status) {
           HttpStatusCode.OK -> {
             val bestSellersResponse: BillWiseOverviewResponse = response.body()
