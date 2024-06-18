@@ -121,7 +121,10 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
                     val fairID = navBackStackEntry.arguments?.getLong("fairId")
                     val hasBills = navBackStackEntry.arguments?.getBoolean("hasBills")
                     FairOverviewScreen(
-                        modifier = Modifier.fillMaxSize().padding(8.dp), fairID = fairID, hasBills =hasBills)
+                        modifier = Modifier.fillMaxSize(),
+                        fairID = fairID,
+                        hasBills = hasBills,
+                        navController)
                   }
             }
       }
