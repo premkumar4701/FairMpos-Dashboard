@@ -112,12 +112,16 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
                 HomeScreen(modifier = Modifier.fillMaxSize(), navController)
               }
               composable(
-                  route = "${FairMposScreens.FairOverview.name}/{fairId}",
-                  arguments = listOf(navArgument("fairId") { type = NavType.LongType })) {
-                      navBackStackEntry ->
+                  route = "${FairMposScreens.FairOverview.name}/{fairId}/{hasBills}",
+                  arguments =
+                      listOf(
+                          navArgument("fairId") { type = NavType.LongType },
+                          navArgument("hasBills") { type = NavType.BoolType })) { navBackStackEntry
+                    ->
                     val fairID = navBackStackEntry.arguments?.getLong("fairId")
+                    val hasBills = navBackStackEntry.arguments?.getBoolean("hasBills")
                     FairOverviewScreen(
-                        modifier = Modifier.fillMaxSize().padding(8.dp), fairID = fairID)
+                        modifier = Modifier.fillMaxSize().padding(8.dp), fairID = fairID, hasBills =hasBills)
                   }
             }
       }

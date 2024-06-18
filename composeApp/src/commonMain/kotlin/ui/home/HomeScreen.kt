@@ -152,6 +152,7 @@ fun CardList(
           fairEndDate.toLocalDateTime(TimeZone.currentSystemDefault()).date
       val fairDate =
           "${fairStartDateInSystemZone.getUIDate()} to ${fairEndDateInSystemZone.getUIDate()}"
+      val hasBills: Boolean = fair.totalBills > 0
       if (fairType == FairType.TODAY) {
         TodayFairCardItem(
             fairName = fair.fairName,
@@ -159,7 +160,8 @@ fun CardList(
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty ?: 0,
             onClick = {
-              navHostController.navigate("${FairMposScreens.FairOverview.name}/${fair.fairID}")
+              navHostController.navigate(
+                  "${FairMposScreens.FairOverview.name}/${fair.fairID}/$hasBills")
             },
             todayNetSale = fair.todayNettValue,
             todayNetQtySold = fair.todayNettSoldQty)
@@ -172,7 +174,8 @@ fun CardList(
             fairDate = fairDate,
             fairStatus = fair.status,
             onClick = {
-              navHostController.navigate("${FairMposScreens.FairOverview.name}/${fair.fairID}")
+              navHostController.navigate(
+                  "${FairMposScreens.FairOverview.name}/${fair.fairID}/$hasBills")
             })
       }
     }

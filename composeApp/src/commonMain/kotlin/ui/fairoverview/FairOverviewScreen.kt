@@ -26,7 +26,7 @@ import fairmpos_dashboard.composeapp.generated.resources.search_titles
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun FairOverviewScreen(modifier: Modifier = Modifier, fairID: Long?) {
+fun FairOverviewScreen(modifier: Modifier = Modifier, fairID: Long?, hasBills: Boolean?) {
   Column(modifier = modifier) {
     Text(
         "21st May, 2024 to 21st Jun, 2024",
