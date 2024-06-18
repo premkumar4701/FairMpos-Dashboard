@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import enum.FairMposScreens
 import fairmpos_dashboard.composeapp.generated.resources.Res
 import fairmpos_dashboard.composeapp.generated.resources.baseline_account_circle_24
 import fairmpos_dashboard.composeapp.generated.resources.baseline_lock_24
@@ -65,7 +67,6 @@ import theme.colorLabel
 import theme.colorProgressBar
 import theme.colorText
 import theme.colorTextInputLayoutStroke
-import enum.FairMposScreens
 
 @Composable
 fun LoginScreen(
@@ -116,7 +117,8 @@ fun LoginScreen(
   }
 
   Column(
-      modifier = modifier.fillMaxSize().padding(16.dp).verticalScroll(state = rememberScrollState()),
+      modifier =
+          modifier.fillMaxSize().padding(16.dp).verticalScroll(state = rememberScrollState()),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center) {
         Image(
@@ -204,7 +206,9 @@ fun LoginScreen(
               }
             },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions =
+                KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { scope.launch { viewModel.onLogin() } }),
             isError = !viewModel.loginErrorView.passwordError.isNullOrEmpty())
         if (!viewModel.loginErrorView.passwordError.isNullOrEmpty()) {
           Text(

@@ -101,7 +101,7 @@ class SetupViewModel(
   private fun getEndpoint(setupModel: SetupModel): String {
     // TODO: Need to be handled build variant wise
     val cleanedSetupCode = cleanCode(setupModel.organizationCode!!)
-    val suffix = ".mposv2-stage.lspl.dev"
+    val suffix = ".fairmpos.com"
     return ensureTrailingSlash("https://${cleanedSetupCode}$suffix")
   }
 
