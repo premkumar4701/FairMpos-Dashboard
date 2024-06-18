@@ -15,7 +15,7 @@ class FairOverviewService(private val httpClient: HttpClient) {
     return flow {
       try {
         val response: HttpResponse =
-            httpClient.get(urlString = "api/dashboard/fairs-overview/{$fairId}")
+            httpClient.get(urlString = "api/dashboard/fairs-overview/$fairId")
         when (val statusCode = response.status) {
           HttpStatusCode.OK -> {
             val fairOverviewResponse: FairOverviewResponse = response.body()
