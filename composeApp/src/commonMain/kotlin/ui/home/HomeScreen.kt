@@ -158,7 +158,9 @@ fun CardList(
             schoolName = fair.schoolName,
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty ?: 0,
-            onClick = { navHostController.navigate(FairMposScreens.FairOverview.name) },
+            onClick = {
+              navHostController.navigate("${FairMposScreens.FairOverview.name}/${fair.fairID}")
+            },
             todayNetSale = fair.todayNettValue,
             todayNetQtySold = fair.todayNettSoldQty)
       } else {
@@ -169,7 +171,9 @@ fun CardList(
             totalNetQtySold = fair.totalNettSoldQty ?: 0,
             fairDate = fairDate,
             fairStatus = fair.status,
-            onClick = { navHostController.navigate(FairMposScreens.FairOverview.name) })
+            onClick = {
+              navHostController.navigate("${FairMposScreens.FairOverview.name}/${fair.fairID}")
+            })
       }
     }
   }

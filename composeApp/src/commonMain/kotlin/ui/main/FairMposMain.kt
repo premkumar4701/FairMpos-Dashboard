@@ -20,10 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import enum.FairMposScreens
 import enum.PlatFormType
 import getPlatform
@@ -70,9 +72,8 @@ fun FairMposAppbar(
 @Composable
 fun FairMposApp(navController: NavHostController = rememberNavController()) {
   val backStackEntry by navController.currentBackStackEntryAsState()
-  val currentScreen =
-      FairMposScreens.valueOf(
-          backStackEntry?.destination?.route ?: FairMposScreens.PlaceHolder.name)
+  val currentRoute = backStackEntry?.destination?.route?.split("/")?.first()
+  val currentScreen = FairMposScreens.valueOf(currentRoute ?: "PlaceHolder")
   val snackbarHostState = remember { SnackbarHostState() }
   Scaffold(
       topBar = {
@@ -110,9 +111,14 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
               composable(route = FairMposScreens.Home.name) {
                 HomeScreen(modifier = Modifier.fillMaxSize(), navController)
               }
-              composable(route = FairMposScreens.FairOverview.name) {
-                FairOverviewScreen(modifier = Modifier.fillMaxSize().padding(8.dp))
-              }
+              composable(
+                  route = "${FairMposScreens.FairOverview.name}/{fairId}",
+                  arguments = listOf(navArgument("fairId") { type = NavType.LongType })) {
+                      navBackStackEntry ->
+                    val fairID = navBackStackEntry.arguments?.getLong("fairId")
+                    FairOverviewScreen(
+                        modifier = Modifier.fillMaxSize().padding(8.dp), fairID = fairID)
+                  }
             }
       }
 }
