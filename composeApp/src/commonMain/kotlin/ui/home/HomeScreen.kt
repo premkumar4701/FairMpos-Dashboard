@@ -336,3 +336,8 @@ fun LoadingProgressBar() {
     CircularProgressIndicator(color = colorProgressBar)
   }
 }
+
+fun navigateToNextScreen(navHostController: NavHostController) {
+    navHostController.navigate(FairMposScreens.BillingDeviceInfo.name)
+}
+
