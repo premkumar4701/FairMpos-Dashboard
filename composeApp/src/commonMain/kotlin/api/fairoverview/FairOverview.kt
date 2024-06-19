@@ -16,7 +16,7 @@ data class FairOverView(
     @SerialName("ID") val id: Long,
     @SerialName("Code") val code: Long,
     @SerialName("Name") val name: String,
-    @SerialName("School") val school: String,
+    @SerialName("School") val school: String?,
     @SerialName("StartDate") val startDate: Instant,
     @SerialName("EndDate") val endDate: Instant,
     @SerialName("TotalDevices") val noOfDevices: Int,
