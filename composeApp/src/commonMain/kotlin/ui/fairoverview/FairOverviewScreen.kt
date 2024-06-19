@@ -3,6 +3,7 @@ package ui.fairoverview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -296,16 +297,19 @@ fun FairInformationDialog(
     fairOverView: MutableState<FairOverView?>,
     isDialogShow: MutableState<Boolean>
 ) {
-
   Dialog(onDismissRequest = { isDialogShow.value = false }) {
     Surface(shape = RoundedCornerShape(8.dp), color = Color.White) {
       Box(contentAlignment = Alignment.Center) {
         Column(modifier = Modifier.padding(20.dp)) {
-          Text(
-              text = "Fair Information",
-              fontWeight = FontWeight.Bold,
-              fontSize = 24.sp,
-              modifier = Modifier.padding(start = 8.dp, end = 8.dp))
+          Row(
+              modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+              horizontalArrangement = Arrangement.Center) {
+                Text(
+                    text = "Fair Information",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(horizontal = 8.dp))
+              }
           Text(
               text = "Fair Name",
               fontWeight = FontWeight.SemiBold,
@@ -324,7 +328,6 @@ fun FairInformationDialog(
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
             Spacer(modifier = Modifier.padding(8.dp))
           }
-
           Row(
               modifier = Modifier.padding(start = 4.dp, end = 4.dp),
               verticalAlignment = Alignment.CenterVertically) {
