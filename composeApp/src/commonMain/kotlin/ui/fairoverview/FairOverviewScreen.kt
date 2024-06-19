@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -49,14 +50,14 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 import theme.colorPrimaryVariant
-import ui.home.LoadingProgressBar
+import uicomponents.LoadingProgressBar
 import utils.getUIDate
 
 @Composable
 fun FairOverviewScreen(
     modifier: Modifier = Modifier,
-    fairID: Long?,
-    hasBills: Boolean?,
+    fairID: Long,
+    hasBills: Boolean,
     navHostController: NavHostController
 ) {
   val viewModel: FairOverviewViewModel = koinInject { parametersOf(fairID, hasBills) }
@@ -73,7 +74,7 @@ fun FairOverviewScreen(
       }
     }
   }
-  isEmpty.value = !hasBills!!
+  isEmpty.value = !hasBills
   viewModel.loadFairOverview()
   if (isDialogShow.value) {
     FairInformationDialog(fairOverView, isDialogShow)
@@ -108,7 +109,7 @@ fun FairOverviewScreen(
       Spacer(Modifier.padding(5.dp))
       DateWiseSaleCardView()
       Spacer(Modifier.padding(5.dp))
-      BillingDevicesInformationCardView()
+      BillingDevicesInformationCardView(fairID = fairID, navHostController = navHostController)
       Spacer(Modifier.padding(5.dp))
       SearchTitlesCardView()
       Spacer(Modifier.padding(5.dp))
@@ -216,11 +217,14 @@ fun DateWiseSaleCardView() {
       }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BillingDevicesInformationCardView() {
+fun BillingDevicesInformationCardView(fairID: Long, navHostController: NavHostController) {
   Card(
       modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(start = 8.dp, end = 8.dp),
-      elevation = 4.dp) {
+      elevation = 4.dp, onClick = {
+          navHostController.navigate("${FairMposScreens.BillingDeviceInfo.name}/$fairID")
+      }) {
         Column {
           Row(modifier = Modifier.padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(
