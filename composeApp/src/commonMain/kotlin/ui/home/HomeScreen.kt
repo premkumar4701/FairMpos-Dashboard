@@ -130,14 +130,18 @@ fun HomeScreen(
         NoDataCard()
       }
       !isEmpty.value && !homeViewModel.isShowLoading -> {
-        CardList(selectedFairs.value, fairDashboardData.value)
+        CardList(selectedFairs.value, fairDashboardData.value, navHostController)
       }
     }
   }
 }
 
 @Composable
-fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
+fun CardList(
+    fairType: FairType,
+    fairDashboardData: List<FairDashboard>,
+    navHostController: NavHostController
+) {
   LazyColumn(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
     items(fairDashboardData) { fair ->
       val fairStartDate = fair.startDate
@@ -148,13 +152,17 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
           fairEndDate.toLocalDateTime(TimeZone.currentSystemDefault()).date
       val fairDate =
           "${fairStartDateInSystemZone.getUIDate()} to ${fairEndDateInSystemZone.getUIDate()}"
+      val hasBills: Boolean = fair.totalBills > 0
       if (fairType == FairType.TODAY) {
         TodayFairCardItem(
             fairName = fair.fairName,
             schoolName = fair.schoolName,
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty ?: 0,
-            onClick = {},
+            onClick = {
+              navHostController.navigate(
+                  "${FairMposScreens.FairOverview.name}/${fair.fairID}/$hasBills")
+            },
             todayNetSale = fair.todayNettValue,
             todayNetQtySold = fair.todayNettSoldQty)
       } else {
@@ -165,7 +173,10 @@ fun CardList(fairType: FairType, fairDashboardData: List<FairDashboard>) {
             totalNetQtySold = fair.totalNettSoldQty ?: 0,
             fairDate = fairDate,
             fairStatus = fair.status,
-            onClick = {})
+            onClick = {
+              navHostController.navigate(
+                  "${FairMposScreens.FairOverview.name}/${fair.fairID}/$hasBills")
+            })
       }
     }
   }

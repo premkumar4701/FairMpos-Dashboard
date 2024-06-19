@@ -20,14 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import enum.FairMposScreens
 import enum.PlatFormType
 import getPlatform
 import theme.colorText
+import ui.fairoverview.FairOverviewScreen
 import ui.home.HomeScreen
 import ui.login.LoginScreen
 import ui.placeholder.PlaceHolderScreen
@@ -39,14 +42,15 @@ fun FairMposAppbar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val canNavigateBack = when(currentScreen) {
+  val canNavigateBack =
+      when (currentScreen) {
         FairMposScreens.Login -> false
         FairMposScreens.Setup -> false
         FairMposScreens.PlaceHolder -> false
         FairMposScreens.Home -> false
         FairMposScreens.NoConnection -> false
         else -> true
-    }
+      }
   TopAppBar(
       title = { Text(currentScreen.name) },
       modifier = modifier,
@@ -68,22 +72,18 @@ fun FairMposAppbar(
 @Composable
 fun FairMposApp(navController: NavHostController = rememberNavController()) {
   val backStackEntry by navController.currentBackStackEntryAsState()
-  val currentScreen =
-      FairMposScreens.valueOf(
-          backStackEntry?.destination?.route ?: FairMposScreens.PlaceHolder.name)
+  val currentRoute = backStackEntry?.destination?.route?.split("/")?.first()
+  val currentScreen = FairMposScreens.valueOf(currentRoute ?: "PlaceHolder")
   val snackbarHostState = remember { SnackbarHostState() }
   Scaffold(
       topBar = {
-        FairMposAppbar(
-            currentScreen = currentScreen,
-            navigateUp = { navController.navigateUp() })
+        FairMposAppbar(currentScreen = currentScreen, navigateUp = { navController.navigateUp() })
       },
       snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = FairMposScreens.PlaceHolder.name,
-            modifier =
-                Modifier.fillMaxSize().padding(innerPadding),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
             enterTransition = {
               slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(900))
             },
@@ -111,6 +111,21 @@ fun FairMposApp(navController: NavHostController = rememberNavController()) {
               composable(route = FairMposScreens.Home.name) {
                 HomeScreen(modifier = Modifier.fillMaxSize(), navController)
               }
+              composable(
+                  route = "${FairMposScreens.FairOverview.name}/{fairId}/{hasBills}",
+                  arguments =
+                      listOf(
+                          navArgument("fairId") { type = NavType.LongType },
+                          navArgument("hasBills") { type = NavType.BoolType })) { navBackStackEntry
+                    ->
+                    val fairID = navBackStackEntry.arguments?.getLong("fairId")
+                    val hasBills = navBackStackEntry.arguments?.getBoolean("hasBills")
+                    FairOverviewScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        fairID = fairID,
+                        hasBills = hasBills,
+                        navController)
+                  }
             }
       }
 }
