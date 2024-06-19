@@ -1,5 +1,6 @@
 package api.billingdeviceinfo
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -42,6 +43,7 @@ data class FairDevicesLastSync(
     @SerialName("MobileNo")
     var mobileNo: String? = null,
 
-    //TODO LastSyncDate instant need to be handled
+    @SerialName("LastSyncInstant")
+    var lastSyncInstant: Instant?
 
 )

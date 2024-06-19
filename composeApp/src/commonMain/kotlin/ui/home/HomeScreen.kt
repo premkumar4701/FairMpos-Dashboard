@@ -1,5 +1,6 @@
 package ui.home
 
+import uicomponents.LoadingProgressBar
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -18,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -52,7 +52,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import theme.colorLabel
 import theme.colorPrimary
-import theme.colorProgressBar
 import theme.colorText
 import utils.getUIDate
 
@@ -159,10 +158,7 @@ fun CardList(
             schoolName = fair.schoolName,
             totalNetSale = fair.totalNettValue,
             totalNetQtySold = fair.totalNettSoldQty ?: 0,
-            onClick = {
-              navHostController.navigate(
-                  "${FairMposScreens.FairOverview.name}/${fair.fairID}/$hasBills")
-            },
+            onClick = { navigateToNextScreen(navHostController, fair.fairID, hasBills) },
             todayNetSale = fair.todayNettValue,
             todayNetQtySold = fair.todayNettSoldQty)
       } else {
@@ -173,10 +169,7 @@ fun CardList(
             totalNetQtySold = fair.totalNettSoldQty ?: 0,
             fairDate = fairDate,
             fairStatus = fair.status,
-            onClick = {
-              navHostController.navigate(
-                  "${FairMposScreens.FairOverview.name}/${fair.fairID}/$hasBills")
-            })
+            onClick = { navigateToNextScreen(navHostController, fair.fairID, hasBills) })
       }
     }
   }
@@ -330,9 +323,6 @@ fun NoDataCard() {
   }
 }
 
-@Composable
-fun LoadingProgressBar() {
-  Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-    CircularProgressIndicator(color = colorProgressBar)
-  }
+fun navigateToNextScreen(navHostController: NavHostController, fairID: Long, hasBills: Boolean) {
+  navHostController.navigate("${FairMposScreens.FairOverview.name}/$fairID/$hasBills")
 }
